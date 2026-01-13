@@ -1,21 +1,21 @@
 // src/services/wallet.service.ts
-import { Connection, PublicKey, Keypair } from "@solana/web3.js"
-
-/*
-Private and Public Keys
-
-Public Key
-This is how the blockchain knows who is holding what
-This is essentially a wallet address
-This is your public identifier
-It is derived from your private key using a maths function called Ed25519
-*/
+import { PublicKey, Keypair } from "@solana/web3.js"
+import { getSolanaConnection } from "../shared/solana.service.js"
 
 // ------------------- Types -------------------
 export interface WalletData {
   publicKey: string
   secretKey: number[]
 }
+
+export interface BalanceResult {
+  sol: number
+  usd: number
+  error?: string
+}
+
+// ------------------- Constants -------------------
+const LAMPORTS_PER_SOL = 1_000_000_000
 
 // ------------------- Key Generation -------------------
 export function generateKeys(): WalletData {
@@ -27,26 +27,32 @@ export function generateKeys(): WalletData {
   }
 }
 
-// ------------------- Connection -------------------
-const connection = new Connection("https://api.mainnet-beta.solana.com")
-
 // ------------------- Get SOL Balance -------------------
-export async function getSolBalance(walletAddress: string): Promise<object> {
+export async function getSolBalance(walletAddress: string): Promise<BalanceResult> {
   try {
-    const publicKey = new PublicKey(walletAddress)
+    // Validate address format early to avoid unnecessary network calls
+    let publicKey: PublicKey
+    try {
+      publicKey = new PublicKey(walletAddress)
+    } catch {
+      return { sol: -1, usd: -1, error: "Invalid wallet address format" }
+    }
+
+    const connection = getSolanaConnection()
     const balanceLamports = await connection.getBalance(publicKey)
 
-    const balanceSol = balanceLamports / 1_000_000_000 // convert lamports to SOL
-    const usdSol = balanceSol * 139.14
-    const result = {
-      sol: balanceSol,
-      usd: usdSol
-    }
-    console.log("SOL Balance:", balanceSol)
-    return result
-  } catch (error) {
+    const balanceSol = balanceLamports / LAMPORTS_PER_SOL
+
+    const solPriceUsd = 139.14 // TODO: Fetch from price API
+    const usdBalance = balanceSol * solPriceUsd
+
+    return { sol: balanceSol, usd: usdBalance }
+  } catch (error: any) {
     console.error("Failed to fetch SOL balance:", error)
-    const result = { sol: 0 }
-    return result
+    return {
+      sol: -1,
+      usd: -1,
+      error: error.message || "Unknown error"
+    }
   }
 }
