@@ -27,7 +27,7 @@ export const fetchSolBalance = async (req: Request, res: Response, next: NextFun
       return
     }
 
-    const balance: number = await getSolBalance(publicKey)
+    const balance: object = await getSolBalance(publicKey)
     res.status(200).json({ publicKey, balance })
   } catch (error) {
     next(error)

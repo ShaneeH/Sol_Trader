@@ -31,16 +31,22 @@ export function generateKeys(): WalletData {
 const connection = new Connection("https://api.mainnet-beta.solana.com")
 
 // ------------------- Get SOL Balance -------------------
-export async function getSolBalance(walletAddress: string): Promise<number> {
+export async function getSolBalance(walletAddress: string): Promise<object> {
   try {
     const publicKey = new PublicKey(walletAddress)
     const balanceLamports = await connection.getBalance(publicKey)
 
     const balanceSol = balanceLamports / 1_000_000_000 // convert lamports to SOL
+    const usdSol = balanceSol * 139.14
+    const result = {
+      sol: balanceSol,
+      usd: usdSol
+    }
     console.log("SOL Balance:", balanceSol)
-    return balanceSol
+    return result
   } catch (error) {
     console.error("Failed to fetch SOL balance:", error)
-    return 0
+    const result = { sol: 0 }
+    return result
   }
 }
