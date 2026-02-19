@@ -1,7 +1,7 @@
 import { Connection } from "@solana/web3.js"
 
 let connectionInstance: Connection | null = null
-const RPC_ENDPOINT = "https://api.mainnet-beta.solana.com"
+const RPC_ENDPOINT: string = process.env.SOLANA_RPC_URL || "https://api.mainnet-beta.solana.com"
 
 // This is a reusable HTTP Connection to the Solana RPC
 function getSolanaConnection(): Connection {
@@ -14,5 +14,8 @@ function getSolanaConnection(): Connection {
   }
   return connectionInstance
 }
+
+
+
 
 export { getSolanaConnection }
