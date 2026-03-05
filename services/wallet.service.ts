@@ -1,8 +1,9 @@
 // src/services/wallet.service.ts
 import { PublicKey, Keypair } from "@solana/web3.js"
 import { getSolanaConnection } from "../shared/solana.service.js"
+import { getSolPriceUSD } from "./price.service.js"
 
-// ------------------- Types -------------------
+// Types 
 export interface WalletData {
   publicKey: string
   secretKey: number[]
@@ -14,10 +15,10 @@ export interface BalanceResult {
   error?: string
 }
 
-// ------------------- Constants -------------------
+// Constants 
 const LAMPORTS_PER_SOL = 1_000_000_000
 
-// ------------------- Key Generation -------------------
+// Key Generation 
 export function generateKeys(): WalletData {
   const keypair = Keypair.generate()
 
@@ -27,7 +28,7 @@ export function generateKeys(): WalletData {
   }
 }
 
-// ------------------- Get SOL Balance -------------------
+// Get SOL Balance
 export async function getSolBalance(walletAddress: string): Promise<BalanceResult> {
   try {
     // Validate address format early to avoid unnecessary network calls
@@ -42,9 +43,8 @@ export async function getSolBalance(walletAddress: string): Promise<BalanceResul
     const balanceLamports = await connection.getBalance(publicKey)
 
     const balanceSol = balanceLamports / LAMPORTS_PER_SOL
-
-    const solPriceUsd = 139.14 // TODO: Fetch from price API
-    const usdBalance = balanceSol * solPriceUsd
+    const Solana_USD = await getSolPriceUSD()
+    const usdBalance = balanceSol * Solana_USD;
 
     return { sol: balanceSol, usd: usdBalance }
   } catch (error: any) {
