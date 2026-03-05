@@ -6,6 +6,8 @@ import morgan from "morgan"
 import rateLimit from "express-rate-limit"
 import walletRoutes from "./routes/wallet.routes.js"
 import healthRoutes from "./routes/health.routes.js"
+import tokenRoutes from "./routes/token.routes.js"
+
 
 const app = express()
 const NODE_ENV: string = process.env.NODE_ENV || "development"
@@ -31,6 +33,7 @@ app.use(limiter)
 /* ---------------- ROUTES ---------------- */
 app.use("/wallet", walletRoutes)
 app.use("/health", healthRoutes)
+app.use("/token", tokenRoutes)
 
 /* ---------------- 404 HANDLER ---------------- */
 app.use((req: Request, res: Response) => {

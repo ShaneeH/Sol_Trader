@@ -12,10 +12,11 @@ interface TokenData {
 
 }
 
-// This Gets the Latest USD Price of a Solana Coin
-async function getTokenData(): Promise<TokenData> {
+// Fetch Rich Meta Data from a Token
+async function getTokenData(tokenAddress : String): Promise<TokenData> {
     try {
-        const url = process.env.DEX_SCREENER_TOKEN_API
+        const baseUrl = process.env.DEX_SCREENER_TOKEN_API
+        const url = `${baseUrl}${tokenAddress}`
 
         if (!url) {
             throw new Error("Dex Screener API env variable not set")
