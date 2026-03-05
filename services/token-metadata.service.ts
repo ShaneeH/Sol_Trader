@@ -13,7 +13,7 @@ interface TokenData {
 }
 
 // Fetch Rich Meta Data from a Token
-async function getTokenData(tokenAddress : String): Promise<TokenData> {
+async function getTokenData(tokenAddress: String): Promise<any> {
     try {
         const baseUrl = process.env.DEX_SCREENER_TOKEN_API
         const url = `${baseUrl}${tokenAddress}`
@@ -22,9 +22,9 @@ async function getTokenData(tokenAddress : String): Promise<TokenData> {
             throw new Error("Dex Screener API env variable not set")
         }
 
+
         const response = await axios.get(url)
         const token = response.data.pairs[0]
-
 
         const data: TokenData = {
             name: token.baseToken.name,
