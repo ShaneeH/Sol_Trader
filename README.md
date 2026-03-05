@@ -1,4 +1,4 @@
-# Solana Wallet API
+# Solana API
 
 A lightweight Node.js and TypeScript API for interacting with the Solana blockchain.  
 This service allows developers to generate wallets, retrieve SOL balances, View Token Rich Meta Data and Execute Trades
