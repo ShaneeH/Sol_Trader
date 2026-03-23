@@ -10,7 +10,6 @@ export const getTokenMetaData = async (req: Request, res: Response, next: NextFu
       return
     }
 
-    // const tokenData = await getTokenData(tokenAddress)
     const token  = String(tokenAddress);
     const data = await getTokenData(token);
 

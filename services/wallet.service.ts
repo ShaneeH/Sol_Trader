@@ -1,7 +1,7 @@
 // src/services/wallet.service.ts
 import { PublicKey, Keypair } from "@solana/web3.js"
 import { getSolanaConnection } from "../shared/solana.service.js"
-import { getSolPriceUSD } from "./price.service.js"
+
 
 // Types 
 export interface WalletData {
@@ -43,7 +43,7 @@ export async function getSolBalance(walletAddress: string): Promise<BalanceResul
     const balanceLamports = await connection.getBalance(publicKey)
 
     const balanceSol = balanceLamports / LAMPORTS_PER_SOL
-    const Solana_USD = await getSolPriceUSD()
+    const Solana_USD = 91.28
     const usdBalance = balanceSol * Solana_USD;
 
     return { sol: balanceSol, usd: usdBalance }

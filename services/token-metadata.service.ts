@@ -4,20 +4,24 @@
 
 // DexScreener API
 import axios from "axios"
+import { getSolanaConnection } from "../shared/solana.service"
 
 interface TokenData {
     name: string,
     symbol: string,
     price: number,
-    img: string
-
+    mc: number,
+    img: string,
+    volume: string,
+    change: string
 }
 
-// Fetch Rich Meta Data from a Token via Dex API
+// Fetch Rich Meta Data from a Token via Dex API and Solana RPC
 async function getTokenData(tokenAddress: String): Promise<any> {
     try {
-        const baseUrl = process.env.DEX_SCREENER_TOKEN_API
-        const url = `${baseUrl}${tokenAddress}`
+        const DexbaseUrl = process.env.DEX_SCREENER_TOKEN_API
+        const SolanaRPC = getSolanaConnection
+        const url = `${DexbaseUrl}${tokenAddress}`
 
         if (!url) {
             throw new Error("Dex Screener API env variable not set")
@@ -30,9 +34,11 @@ async function getTokenData(tokenAddress: String): Promise<any> {
         const data: TokenData = {
             name: token.baseToken.name,
             symbol: token.baseToken.symbol,
+            mc: token.marketCap,
             price: Number(token.priceUsd),
             img: token.info.imageUrl,
-            
+            volume : token.volume,
+            change : token.priceChange       
         }
 
         return data;

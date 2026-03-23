@@ -4,14 +4,14 @@ import app from "./app.js"
 
 dotenv.config()
 
-console.log("SERVER RESTARTED", new Date().toISOString())
+console.log("\nSERVER RESTARTED", new Date().toISOString())
 
 const PORT: number = Number(process.env.PORT) || 3000
 const NODE_ENV: string = process.env.NODE_ENV || "development"
 
 // ---------------- SERVER ----------------
 const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT} in ${NODE_ENV} mode`)
+  console.log(`Server running on port ${PORT} in ${NODE_ENV} mode \n`)
 })
 
 // ---------------- GRACEFUL SHUTDOWN ----------------
