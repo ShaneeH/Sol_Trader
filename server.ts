@@ -4,6 +4,8 @@ import app from "./app.js"
 
 dotenv.config()
 
+console.log("SERVER RESTARTED", new Date().toISOString())
+
 const PORT: number = Number(process.env.PORT) || 3000
 const NODE_ENV: string = process.env.NODE_ENV || "development"
 

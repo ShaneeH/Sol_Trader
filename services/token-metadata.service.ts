@@ -7,12 +7,13 @@ import axios from "axios"
 
 interface TokenData {
     name: string,
+    symbol: string,
     price: number,
     img: string
 
 }
 
-// Fetch Rich Meta Data from a Token
+// Fetch Rich Meta Data from a Token via Dex API
 async function getTokenData(tokenAddress: String): Promise<any> {
     try {
         const baseUrl = process.env.DEX_SCREENER_TOKEN_API
@@ -28,8 +29,10 @@ async function getTokenData(tokenAddress: String): Promise<any> {
 
         const data: TokenData = {
             name: token.baseToken.name,
+            symbol: token.baseToken.symbol,
             price: Number(token.priceUsd),
-            img: token.info.imageUrl
+            img: token.info.imageUrl,
+            
         }
 
         return data;
